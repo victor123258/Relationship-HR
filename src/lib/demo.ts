@@ -1,0 +1,86 @@
+import type { Participant, SessionData } from "../types";
+
+export const DEMO_CODE = "DEMO26";
+
+const demoA: Participant = {
+  name: "Alex",
+  submittedAt: Date.now() - 1000 * 60 * 43,
+  answers: {
+    s1_name: "Alex", s1_age: 27, s1_location: "Austin, TX", s1_occupation: "Product Designer",
+    s1_status: "single", s1_children: "none", s1_situationship: "no",
+    s2_length: "1-3y",
+    s2_why_end: "We wanted different futures and respected each other too much to drag it out.",
+    s2_over_ex: "yes", s2_talk_ex: "no",
+    s2_lesson: "Silence is not peace. Saying the hard thing early is kinder.",
+    s3_angry: "space-then-talk", s3_hurt: "listen-apologize", s3_upset: "time-communicate", s3_disagree: "compromise",
+    s4_busy: "quick-text", s4_freq: "throughout", s4_calls: "yes",
+    s5_cheat: "no", s5_entertain: "no", s5_flirt: "no", s5_anger: "sometimes", s5_lie: "sometimes",
+    s5_biggest_flag: "I go quiet when overwhelmed and people read it as coldness.",
+    s6_comm: 8, s6_loyalty: 9, s6_affection: 7, s6_romance: 6, s6_patience: 7, s6_support: 8, s6_consistency: 8, s6_humor: 9, s6_dates: 7,
+    s6_good_partner: "Showing up the same way on bad days as on good ones.",
+    s6_make_loved: "Remember the small things they mention once and act on them weeks later.",
+    s7_job: "yes", s7_dates: "take-turns", s7_responsible: "trying",
+    s8_love_lang: "touch", s8_affection: "very", s8_reassurance: "now-and-then",
+    s9_jealousy: 3, s9_phone: "reason", s9_friends: "depends",
+    s9_boundaries: "No 2am texting exes. Everything else is negotiable.",
+    s10_why: "serious", s10_years: "Senior designer, same city, maybe a dog.",
+    s10_commitment: "Choosing the same person on the days it would be easier not to.",
+    s10_loyal: "yes",
+    s11_apology: "yes",
+    s12_plan: "book",
+    f_choose: "I do what I say I will do. Boring, but rare.",
+    f_promise: "I will never let you guess where you stand.",
+    f_never: "Use something you told me in confidence as ammunition later.",
+    f_perfect_date: "Bookstore with a coffee budget, then cooking something neither of us has made before.",
+    f_argument: "Say one true thing kindly before sleep, even if the issue waits for morning.",
+    f_bad_day: "Food, silence or venting (their choice), then one small solved problem.",
+    f_intentions: "Build something that outlasts the honeymoon phase.",
+    f_should_know: "I need about 20 minutes alone after work before I am fully human.",
+  },
+};
+
+const demoB: Participant = {
+  name: "Riley",
+  submittedAt: Date.now() - 1000 * 60 * 11,
+  answers: {
+    s1_name: "Riley", s1_age: 26, s1_location: "Austin, TX", s1_occupation: "Nurse",
+    s1_status: "single", s1_children: "none", s1_situationship: "no",
+    s2_length: "3-12m",
+    s2_why_end: "They kept their options open. I stopped being one of them.",
+    s2_over_ex: "check-page", s2_talk_ex: "occasionally",
+    s2_lesson: "Consistency is a love language. Mixed signals are a no.",
+    s3_angry: "talk-out", s3_hurt: "listen-apologize", s3_upset: "absolutely", s3_disagree: "debate-fair",
+    s4_busy: "tell-later", s4_freq: "throughout", s4_calls: "depends",
+    s5_cheat: "no", s5_entertain: "sometimes", s5_flirt: "bored", s5_anger: "no", s5_lie: "never",
+    s5_biggest_flag: "I overthink and occasionally invent problems that were not there.",
+    s6_comm: 7, s6_loyalty: 9, s6_affection: 9, s6_romance: 9, s6_patience: 4, s6_support: 5, s6_consistency: 7, s6_humor: 8, s6_dates: 8,
+    s6_good_partner: "Being someone's safe place, not another thing they have to manage.",
+    s6_make_loved: "Plan the date fully so they never have to make one decision after a long shift.",
+    s7_job: "yes", s7_dates: "take-turns", s7_responsible: "yes",
+    s8_love_lang: "quality", s8_affection: "very", s8_reassurance: "constant",
+    s9_jealousy: 7, s9_phone: "no", s9_friends: "yes",
+    s9_boundaries: "Tell me if someone flirts with you. I would rather hear it from you.",
+    s10_why: "serious", s10_years: "Charge nurse, living with someone who feels like home.",
+    s10_commitment: "One person. All the tabs closed.",
+    s10_loyal: "yes",
+    s11_apology: "yes",
+    s12_plan: "questions",
+    f_choose: "I love loudly and I remember everything you tell me.",
+    f_promise: "You will always know you are wanted, not tolerated.",
+    f_never: "Compare you to an ex. Ever.",
+    f_perfect_date: "Sunset drive-in with the good snacks hidden in my bag.",
+    f_argument: "I can't sleep angry. We talk, even if it is just 'I love you, more tomorrow.'",
+    f_bad_day: "Parse whether they want solutions or a witness, then be that.",
+    f_intentions: "Something real, with someone who chooses it back.",
+    f_should_know: "My job is emotionally heavy; some nights I need quiet, not distance.",
+  },
+};
+
+export function demoSession(): SessionData {
+  return {
+    code: DEMO_CODE,
+    createdAt: Date.now() - 1000 * 60 * 60,
+    a: demoA,
+    b: demoB,
+  };
+}
