@@ -1,110 +1,107 @@
-# Relationship HR — Mutual Compatibility Audit
+# Relationship HR™ — Mutual Compatibility Audit
 
-An **equality-based**, fully **client-side** web application where two partners each fill out the identical
-**Relationship Application Form (RH-1312)** and simultaneously receive a **mutual compatibility report**.
+> Both of you fill it out. Both of you get the report. No one judges anyone — the match speaks for itself.
 
-> Both of you fill it out. Both of you get the report. **Nobody judges anybody.**
-> The app evaluates *the match itself* — never the people.
+**Relationship HR** is an equality-based, fully client-side web app where two partners each complete
+the same *Relationship Application Form* and receive a **mutual compatibility report** that unlocks
+**simultaneously** — only when both have submitted. Neither user is "HR." Neither user is a judge.
+The app evaluates **the match**, never the people.
 
----
+<!-- screenshots
+![Landing](docs/screenshot-landing.png)
+![Report](docs/screenshot-report.png)
+-->
 
 ## Core Philosophy
 
-- **Equality first** — both users are equal applicants. There is no "HR", no interviewer, no judge.
-- **Mutual reveal** — the report unlocks only when **both** have submitted, and both see the identical page.
-- **Match-focused language** — friction points are framed as conversation starters, never as rejections.
-- **Privacy by design** — neither user ever sees the other's raw answers; only the final compatibility breakdown.
-  Everything runs in the browser; there is no backend, no database, no accounts.
+- **Equality first** — both users are equal applicants filling the identical, gender-neutral form.
+- **Mutual reveal** — results stay sealed until both submissions exist. No peeking, by design.
+- **Match-focused language** — friction points are framed as growth opportunities and conversation
+  starters, never as "rejection," "failure," or criticism of either person.
+- **Privacy during entry** — neither partner sees the other's raw answers while filling the form.
 
 ## Features
 
-- 6-character **Match Code** sessions (e.g. `XK9F26`) with shareable links.
-- 13-section, step-by-step **application wizard** with autosave drafts (`localStorage`).
-- **Waiting room** with live status; auto-opens the report when the second file lands.
-- Transparent **compatibility engine** (0–100%): exact matches, complementary synergies, 1–10 rating deltas,
-  and dealbreaker *flags* (flagged for discussion — never auto-reject).
-- **Report:** animated circular score, match-focused status stamp, both-sides-visible category audit table,
-  radar + bar charts, synergy highlights, discussion areas, suggested conversation starters.
-- **Share report** link (data rides, base64-encoded, inside the URL hash so it works cross-device),
-  **Download as PDF**, and same-device sync via `BroadcastChannel` + `storage` events.
-- Works offline after first load. No API keys. No servers.
+- 6-character match codes (unambiguous alphabet — no O/0/I/1 confusion)
+- Session dashboard with live applicant status (`Not started → Filling out… Section 3/13 → Submitted`)
+- 13-section application wizard with a corporate onboarding checklist, card-style radio inputs,
+  1–10 rating sliders, conditional follow-up questions, character counts, and per-step validation
+- Auto-save to `localStorage` on every keystroke — close the tab, come back, resume where you left off
+- Waiting room with document-scanner animation, rotating relationship facts, and a cross-device
+  **handoff link** (partner's sealed answers travel inside the URL — still no server)
+- Mutual Compatibility Report with:
+  - animated count-up overall score donut (emerald / amber / red by alignment)
+  - values-conflict banner (dealbreakers are flagged for conversation, never auto-rejection)
+  - 7-axis radar chart overlaying both applicants
+  - expandable category breakdown table with per-question contributions
+  - synergy highlights, areas to explore together, and tailored conversation starters
+  - side-by-side final reflections
+- Share Report as a URL (results encoded + compressed in the link) or download as a styled PDF
+- Demo mode with realistic sample data — see a full report in one click
+- Dark mode toggle (persisted), mobile-first responsive, hash routing for static hosting
+
+## Privacy
+
+Everything runs in your browser. There is **no backend, no database, no accounts, no analytics,
+no cookies**. Answers live in `localStorage`, namespaced per session
+(`session_{MATCHCODE}_personA_answers`, etc.). Cross-tab sync uses `BroadcastChannel` with a
+`storage` event fallback; cross-device sharing works by encoding data directly into URLs
+(LZ-string compression). After the first load the app works fully offline.
 
 ## Tech Stack
 
-| Concern   | Choice                                   |
-| --------- | ---------------------------------------- |
-| Framework | Vite + React 19 + TypeScript             |
-| Styling   | Tailwind CSS 4                           |
-| Animation | framer-motion                            |
-| Icons     | lucide-react                             |
-| Charts    | recharts                                 |
-| Routing   | react-router-dom **HashRouter** (`/#/…`) |
-| PDF       | html2pdf.js                              |
-| State     | Browser `localStorage` + BroadcastChannel |
+- **Vite + React + TypeScript** — static output, no framework server needed
+- **Tailwind CSS v4** — monochrome "corporate document" design system
+- **framer-motion** — page transitions, staggered reveals, count-up animations
+- **recharts** — radar chart
+- **react-router-dom (HashRouter)** — GitHub-Pages-safe routing (`/#/session/XK9F26`)
+- **lucide-react** — icons
+- **jsPDF** — client-side PDF export
+- **lz-string** — URL payload compression
 
 ## Getting Started
 
+Prerequisites: **Node.js 18+**
+
 ```bash
-npm install     # install dependencies
-npm run dev     # start the dev server (http://localhost:5173)
-npm run build   # production build → dist/
-npm run preview # preview the production build locally
+git clone <your-repo-url>
+cd relationship-hr
+npm install
+npm run dev        # http://localhost:5173
+```
+
+## Building for Production
+
+```bash
+npm run build      # outputs to /dist
+npm run preview    # locally preview the production build
 ```
 
 ## Deployment
 
-The app uses **hash routing** and a **relative base path (`base: './'`)**, so the static `dist/` output works on
-any host and any sub-path with zero configuration.
+The build produces a fully static bundle (all JS/CSS inlined into `index.html`).
 
-### GitHub Pages
+- **GitHub Pages:** `npm run build`, then publish `/dist` with the `gh-pages` package
+  (`npx gh-pages -d dist`) or via a GitHub Actions static-deploy workflow.
+- **Netlify:** drag-and-drop the `/dist` folder, or connect the repo with build command
+  `npm run build` and publish directory `dist`.
+- **Vercel:** import the repo, framework preset **Vite**, output directory `dist`.
+- **Any static host:** upload the contents of `/dist`. Hash routing means no server
+  rewrites are ever required.
 
-```bash
-npm run deploy    # builds, then pushes dist/ to the gh-pages branch
-```
+## How It Works
 
-Then in your repo: **Settings → Pages → Source: `gh-pages` branch**. Your app lives at
-`https://<user>.github.io/<repo>/` — shareable links look like `https://<user>.github.io/<repo>/#/session/XK9F26`.
+1. One partner starts a session → gets a 6-character match code (`/#/session/XK9F26`) and shares it.
+2. Each partner is assigned Applicant A or B on a first-come basis and completes the same 13-section
+   application independently. Progress auto-saves; live status syncs across open tabs.
+3. When the second application lands, the report unlocks for **both** at the same time.
+4. The scoring engine compares answers across 7 weighted categories (communication, emotional
+   intelligence, values & intentions, financial, love & affection, boundaries & trust,
+   accountability & growth), combining exact-match scoring, ordinal distance scoring,
+   slider-delta scoring, complementary-fit bonuses, and lightweight text-depth analysis.
+   Dealbreaker mismatches are surfaced as *values conflicts to discuss* — they cap, never erase,
+   the score.
 
-### Netlify
+## License
 
-Drag the `dist/` folder into the Netlify dashboard, or connect the repo with:
-
-- Build command: `npm run build`
-- Publish directory: `dist`
-
-### Vercel
-
-```bash
-npx vercel
-```
-
-- Framework preset: **Vite**
-- Build command: `npm run build`
-- Output directory: `dist`
-
-### Any static host (or a ZIP)
-
-Run `npm run build` and upload the `dist/` folder anywhere — it is a single self-contained HTML file.
-
-## How Sessions Sync (No Backend)
-
-1. **Same device / tabs:** `BroadcastChannel` + `storage` events update every open tab instantly.
-2. **Cross-device:** after submitting, your sealed answers are base64-encoded into the share link
-   (`#/session/XK9F26?d=…`). When your partner opens it, your file merges into their browser; when they submit,
-   the report opens — and their "Share report" link carries both files back to you.
-
-## Project Structure
-
-```
-src/
-  components/   ui primitives, chrome, score ring, charts
-  pages/        Landing, Session, Apply, Waiting, Report
-  lib/          session storage/sync, payload encoding, compatibility algorithm, demo data
-  data/         questions.ts — the full RH-1312 form schema
-  types/        shared TypeScript types
-```
-
-## Disclaimer
-
-This is a playful communication tool for couples and almost-couples. The "department" issues data,
-never verdicts — and certainly never rejections.
+MIT — use it, fork it, ship it.

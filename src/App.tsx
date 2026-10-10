@@ -1,34 +1,52 @@
 import { useEffect } from "react";
 import { HashRouter, Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { Chrome } from "./components/Chrome";
-import Apply from "./pages/Apply";
-import Landing from "./pages/Landing";
-import Report from "./pages/Report";
-import SessionPage from "./pages/Session";
-import Waiting from "./pages/Waiting";
+import { AnimatePresence } from "framer-motion";
+import { AppProviders } from "./context/SessionContext";
+import { Header } from "./components/layout/Header";
+import { Footer } from "./components/layout/Footer";
+import { Toaster } from "./components/ui/Toast";
+import { LandingPage } from "./pages/LandingPage";
+import { SessionDashboard } from "./pages/SessionDashboard";
+import { FormPage } from "./pages/FormPage";
+import { WaitingRoom } from "./pages/WaitingRoom";
+import { ResultsPage } from "./pages/ResultsPage";
+import { SharedReportPage } from "./pages/SharedReportPage";
+import { ImportPage } from "./pages/ImportPage";
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
+function Shell() {
+  const location = useLocation();
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-  }, [pathname]);
-  return null;
+  }, [location.pathname]);
+
+  return (
+    <div className="paper-bg flex min-h-screen flex-col">
+      <Header />
+      <AnimatePresence mode="wait" initial={false}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/session/:code" element={<SessionDashboard />} />
+          <Route path="/session/:code/form" element={<FormPage />} />
+          <Route path="/session/:code/waiting" element={<WaitingRoom />} />
+          <Route path="/session/:code/results" element={<ResultsPage />} />
+          <Route path="/session/:code/import/:data" element={<ImportPage />} />
+          <Route path="/shared/:data" element={<SharedReportPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AnimatePresence>
+      <Footer />
+      <Toaster />
+    </div>
+  );
 }
 
 export default function App() {
   return (
-    <HashRouter>
-      <ScrollToTop />
-      <Chrome>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/session/:code" element={<SessionPage />} />
-          <Route path="/session/:code/apply" element={<Apply />} />
-          <Route path="/session/:code/waiting" element={<Waiting />} />
-          <Route path="/session/:code/report" element={<Report />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Chrome>
-    </HashRouter>
+    <AppProviders>
+      <HashRouter>
+        <Shell />
+      </HashRouter>
+    </AppProviders>
   );
 }
